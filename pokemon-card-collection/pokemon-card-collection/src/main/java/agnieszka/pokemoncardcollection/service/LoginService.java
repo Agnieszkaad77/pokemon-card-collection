@@ -27,6 +27,7 @@ public class LoginService {
         if (!userEntity.getPassword().equals(userLoginDto.getPassword())) {
             throw new LoginException("Password or email is not correct");
         }
+        sessionDto.login(userEntity);
     }
 
     public UserEntity getLoggedUser() {
