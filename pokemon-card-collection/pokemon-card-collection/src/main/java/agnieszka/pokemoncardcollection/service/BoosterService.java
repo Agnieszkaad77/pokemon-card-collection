@@ -34,7 +34,7 @@ public class BoosterService {
     }
 
     private boolean verifyBalance() {
-        return loginService.getLoggedUser().getPokeCoins() > PRICE;
+        return loginService.getLoggedUser().getPokeCoins() >= PRICE;
     }
 
     private List<Card> prepareBooster() {
