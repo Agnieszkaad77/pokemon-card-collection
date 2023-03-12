@@ -1,13 +1,13 @@
 package agnieszka.pokemoncardcollection.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,10 +25,22 @@ public class UserEntity {
     private boolean agree;
     private int pokeCoins;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Card> cards;
+
     public UserEntity(String email, String password, boolean agree) {
         this.email = email;
         this.password = password;
         this.agree = agree;
-        pokeCoins = 20;
+        this.pokeCoins = 20;
+        this.cards = new ArrayList<>();
+    }
+
+    public void decreasePokeCoins(int price) {
+        this.pokeCoins -= price;
+    }
+
+    public void addCards(List<Card> purchasedCards) {
+        this.cards.addAll(purchasedCards);
     }
 }
