@@ -10,8 +10,7 @@
 <h2>Cost: 5 Poke Coins</h2>
 
 <h3 th:text="${noPokeCoinsMessage}"></h3>
-<h3>Balance:</h3>
-<h3 th:text="${pokeCoins}"></h3>
+<h3 th:text="'Balance: ' + ${pokeCoins}"></h3>
 
 <form action="/buy-booster" method="post">
     <input type="submit" value="Purchase">

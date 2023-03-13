@@ -24,6 +24,7 @@ public class UserEntity {
     private String password;
     private boolean agree;
     private int pokeCoins;
+    private int points;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Card> cards;
@@ -42,5 +43,6 @@ public class UserEntity {
 
     public void addCards(List<Card> purchasedCards) {
         this.cards.addAll(purchasedCards);
+        this.points += purchasedCards.size();
     }
 }
