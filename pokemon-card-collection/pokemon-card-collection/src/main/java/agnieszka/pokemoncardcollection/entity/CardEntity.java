@@ -2,17 +2,15 @@ package agnieszka.pokemoncardcollection.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @ToString
-public class Card {
+@Builder
+public class CardEntity {
 
     @Id
     private String id;

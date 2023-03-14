@@ -1,8 +1,10 @@
 package agnieszka.pokemoncardcollection.service;
 
-import agnieszka.pokemoncardcollection.entity.Card;
+import agnieszka.pokemoncardcollection.dto.CardDto;
+import agnieszka.pokemoncardcollection.entity.CardEntity;
 import agnieszka.pokemoncardcollection.entity.UserEntity;
 import agnieszka.pokemoncardcollection.exception.BoosterException;
+import agnieszka.pokemoncardcollection.mapper.CardMapper;
 import agnieszka.pokemoncardcollection.repository.CardRepository;
 import agnieszka.pokemoncardcollection.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,27 +24,30 @@ public class BoosterService {
     private CardRepository cardRepository;
     private LoginService loginService;
     private UserRepository userRepository;
+    private CardMapper cardMapper;
 
-    public List<Card> buyBooster() {
+    public List<CardDto> buyBooster() {
         if (!verifyBalance()) {
             throw new BoosterException("You have not enough Poke Coins!");
         }
-        List<Card> randomCards = prepareBooster();
+        List<CardEntity> randomCards = prepareBooster();
         processPurchase(randomCards);
 
-        return randomCards;
+        return randomCards.stream()
+                .map(cardEntity -> cardMapper.toCardDto(cardEntity))
+                .toList();
     }
 
     private boolean verifyBalance() {
         return loginService.getLoggedUser().getPokeCoins() >= PRICE;
     }
 
-    private List<Card> prepareBooster() {
-        List<Card> cards = cardRepository.findAll();
+    private List<CardEntity> prepareBooster() {
+        List<CardEntity> cards = cardRepository.findAll();
         Random random = new Random();
-        List<Card> randomCards = new ArrayList<>();
+        List<CardEntity> randomCards = new ArrayList<>();
         for (int i = 0; i < BOOSTER_SIZE; i++) {
-            Card card = cards.get(random.nextInt(cards.size()));
+            CardEntity card = cards.get(random.nextInt(cards.size()));
             if (randomCards.contains(card)) {
                 i--;
             } else {
@@ -52,7 +57,7 @@ public class BoosterService {
         return randomCards;
     }
 
-    private void processPurchase(List<Card> randomCards) {
+    private void processPurchase(List<CardEntity> randomCards) {
         UserEntity loggedUser = loginService.getLoggedUser();
         loggedUser.decreasePokeCoins(PRICE);
         loggedUser.addCards(randomCards);
