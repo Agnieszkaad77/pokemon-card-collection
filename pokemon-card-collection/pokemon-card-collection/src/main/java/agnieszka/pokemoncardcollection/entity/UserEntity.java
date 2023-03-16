@@ -1,10 +1,7 @@
 package agnieszka.pokemoncardcollection.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
+@Builder
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -23,19 +22,13 @@ public class UserEntity {
     private String email;
     private String password;
     private boolean agree;
-    private int pokeCoins;
+    @Builder.Default
+    private int pokeCoins = 20;
     private int points;
-
+    //usunac points i zrobic metode na ilosc kart (size)
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<CardEntity> cards;
-
-    public UserEntity(String email, String password, boolean agree) {
-        this.email = email;
-        this.password = password;
-        this.agree = agree;
-        this.pokeCoins = 20;
-        this.cards = new ArrayList<>();
-    }
+    private List<CardEntity> cards = new ArrayList<>();
 
     public void decreasePokeCoins(int price) {
         this.pokeCoins -= price;

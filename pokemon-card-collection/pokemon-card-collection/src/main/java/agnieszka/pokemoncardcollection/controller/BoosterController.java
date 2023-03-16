@@ -1,6 +1,7 @@
 package agnieszka.pokemoncardcollection.controller;
 
 import agnieszka.pokemoncardcollection.dto.CardDto;
+import agnieszka.pokemoncardcollection.dto.UserDto;
 import agnieszka.pokemoncardcollection.entity.UserEntity;
 import agnieszka.pokemoncardcollection.exception.BoosterException;
 import agnieszka.pokemoncardcollection.exception.LoginException;
@@ -24,8 +25,8 @@ public class BoosterController {
     @GetMapping("/buy-booster")
     public String getBuyBoosterPage(Model model) {
         try {
-            UserEntity userEntity = loginService.getLoggedUser();
-            model.addAttribute("loggedUser", userEntity);
+            UserDto userDto = loginService.getLoggedUserDto();
+            model.addAttribute("loggedUser", userDto);
             addPokeCoinsAttribute(model);
         } catch (LoginException e) {
             return "redirect:/login";
@@ -47,6 +48,6 @@ public class BoosterController {
     }
 
     private void addPokeCoinsAttribute(Model model) {
-        model.addAttribute("pokeCoins", loginService.getLoggedUser().getPokeCoins());
+        model.addAttribute("pokeCoins", loginService.getLoggedUserDto().getPokeCoins());
     }
 }
