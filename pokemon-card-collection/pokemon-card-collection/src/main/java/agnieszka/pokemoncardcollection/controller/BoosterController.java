@@ -1,6 +1,6 @@
 package agnieszka.pokemoncardcollection.controller;
 
-import agnieszka.pokemoncardcollection.entity.Card;
+import agnieszka.pokemoncardcollection.dto.CardDto;
 import agnieszka.pokemoncardcollection.entity.UserEntity;
 import agnieszka.pokemoncardcollection.exception.BoosterException;
 import agnieszka.pokemoncardcollection.exception.LoginException;
@@ -36,7 +36,7 @@ public class BoosterController {
     @PostMapping("/buy-booster")
     public String processBuyBooster(Model model) {
         try {
-            List<Card> cards = boosterService.buyBooster();
+            List<CardDto> cards = boosterService.buyBooster();
             model.addAttribute("cards", cards);
             addPokeCoinsAttribute(model);
         } catch (BoosterException e) {
