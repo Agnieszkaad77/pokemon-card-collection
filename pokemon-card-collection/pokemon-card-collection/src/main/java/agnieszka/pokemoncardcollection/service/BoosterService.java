@@ -5,6 +5,7 @@ import agnieszka.pokemoncardcollection.entity.CardEntity;
 import agnieszka.pokemoncardcollection.entity.UserEntity;
 import agnieszka.pokemoncardcollection.exception.BoosterException;
 import agnieszka.pokemoncardcollection.mapper.CardMapper;
+import agnieszka.pokemoncardcollection.mapper.UserMapper;
 import agnieszka.pokemoncardcollection.repository.CardRepository;
 import agnieszka.pokemoncardcollection.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class BoosterService {
     private LoginService loginService;
     private UserRepository userRepository;
     private CardMapper cardMapper;
+    private UserMapper userMapper;
 
     public List<CardDto> buyBooster() {
         if (!verifyBalance()) {
@@ -39,7 +41,7 @@ public class BoosterService {
     }
 
     private boolean verifyBalance() {
-        return loginService.getLoggedUser().getPokeCoins() >= PRICE;
+        return loginService.getLoggedUserDto().getPokeCoins() >= PRICE;
     }
 
     private List<CardEntity> prepareBooster() {
@@ -58,7 +60,7 @@ public class BoosterService {
     }
 
     private void processPurchase(List<CardEntity> randomCards) {
-        UserEntity loggedUser = loginService.getLoggedUser();
+        UserEntity loggedUser = loginService.getLoggedUserEntity();
         loggedUser.decreasePokeCoins(PRICE);
         loggedUser.addCards(randomCards);
         userRepository.save(loggedUser);

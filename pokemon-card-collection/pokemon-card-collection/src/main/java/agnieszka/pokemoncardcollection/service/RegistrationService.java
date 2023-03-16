@@ -3,6 +3,7 @@ package agnieszka.pokemoncardcollection.service;
 import agnieszka.pokemoncardcollection.dto.UserRegistrationDto;
 import agnieszka.pokemoncardcollection.entity.UserEntity;
 import agnieszka.pokemoncardcollection.exception.RegistrationException;
+import agnieszka.pokemoncardcollection.mapper.UserMapper;
 import agnieszka.pokemoncardcollection.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class RegistrationService {
 
     private UserRepository userRepository;
+    private UserMapper userMapper;
 
     public void register(UserRegistrationDto userRegistrationDto) {
         if (checkMandatoryFields(userRegistrationDto)) {
@@ -21,9 +23,7 @@ public class RegistrationService {
                 || !checkPasswordCorrectness(userRegistrationDto)) {
             throw new RegistrationException("Email or password is not correct!");
         }
-        UserEntity userEntity = new UserEntity(userRegistrationDto.getEmail(),
-                userRegistrationDto.getPassword(),
-                userRegistrationDto.isAgree());
+        UserEntity userEntity = userMapper.toUserEntity(userRegistrationDto);
         userRepository.save(userEntity);
     }
 

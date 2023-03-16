@@ -1,9 +1,11 @@
 package agnieszka.pokemoncardcollection.service;
 
 import agnieszka.pokemoncardcollection.dto.SessionDto;
+import agnieszka.pokemoncardcollection.dto.UserDto;
 import agnieszka.pokemoncardcollection.dto.UserLoginDto;
 import agnieszka.pokemoncardcollection.entity.UserEntity;
 import agnieszka.pokemoncardcollection.exception.LoginException;
+import agnieszka.pokemoncardcollection.mapper.UserMapper;
 import agnieszka.pokemoncardcollection.repository.UserRepository;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class LoginService {
     @Resource(name = "sessionScopedBean")
     private SessionDto sessionDto;
     private UserRepository userRepository;
+    private UserMapper userMapper;
 
 
     public void login(UserLoginDto userLoginDto) {
@@ -30,7 +33,14 @@ public class LoginService {
         sessionDto.login(userEntity);
     }
 
-    public UserEntity getLoggedUser() {
+    public UserDto getLoggedUserDto() {
+        if (sessionDto.getUser() == null) {
+            throw new LoginException("User is not logged!");
+        }
+        return userMapper.toUserDto(sessionDto.getUser());
+    }
+
+    UserEntity getLoggedUserEntity() {
         if (sessionDto.getUser() == null) {
             throw new LoginException("User is not logged!");
         }
